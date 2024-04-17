@@ -3,7 +3,7 @@ import 'package:ahad/pages/nav_pages/admin.dart';
 import 'package:ahad/pages/nav_pages/finances.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:ahad/pages/nav_pages/compte.dart';
+import 'package:ahad/pages/nav_pages/compte/compte.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

@@ -1,3 +1,4 @@
+import 'package:ahad/pages/profile/show_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:ahad/pages/authentification/screens/ajout_membre.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,22 +6,22 @@ import 'package:ahad/pages/administration/models/user_model.dart';
 import 'package:ahad/pages/constants.dart';
 
 class Membres extends StatefulWidget {
-  const Membres({Key? key}) : super(key: key);
+  const Membres({super.key});
 
   @override
   State<Membres> createState() => _MembresState();
 }
 
 class _MembresState extends State<Membres> {
-  Future<List<User>> getUsersFromFirestore() async {
-    List<User> users = [];
+  Future<List<UserData>> getUsersFromFirestore() async {
+    List<UserData> users = [];
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('utilisateurs')
           .get(); // Correction de 'users' à 'utilisateurs'
-      querySnapshot.docs.forEach((doc) {
-        users.add(User.fromMap(doc.data() as Map<String, dynamic>));
-      });
+      for (var doc in querySnapshot.docs) {
+        users.add(UserData.fromMap(doc.data() as Map<String, dynamic>));
+      }
     } catch (error) {
       print(
           'Erreur lors de la récupération des utilisateurs depuis Firestore : $error');
@@ -43,6 +44,15 @@ class _MembresState extends State<Membres> {
         backgroundColor: Colors.indigo,
         iconTheme: IconThemeData(
           color: Colors.white,
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            //color: Colors.white,
+          ),
         ),
         title: Row(
           children: const [
@@ -86,7 +96,7 @@ class _MembresState extends State<Membres> {
                           topRight: Radius.circular(30),
                         ),
                       ),
-                      child: FutureBuilder<List<User>>(
+                      child: FutureBuilder<List<UserData>>(
                         future: getUsersFromFirestore(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
@@ -100,7 +110,7 @@ class _MembresState extends State<Membres> {
                                   Text('Erreur de chargement des utilisateurs'),
                             );
                           } else {
-                            List<User> users = snapshot.data!;
+                            List<UserData> users = snapshot.data!;
                             return ListView.builder(
                               itemCount: users.length,
                               itemBuilder: (context, index) {
@@ -140,7 +150,14 @@ class _MembresState extends State<Membres> {
                                       ),
                                       title: Text(user.nom), // Correction ici
                                       subtitle: Text(user.titre),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ShowUserProfile(
+                                                        userId: user.id)));
+                                      },
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [

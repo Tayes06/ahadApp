@@ -21,6 +21,8 @@ class _AddMemberFormState extends State<AddMemberForm> {
   TextEditingController emailController = TextEditingController();
   TextEditingController telephoneController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -222,7 +224,6 @@ class _AddMemberFormState extends State<AddMemberForm> {
                   onPressed: () async {
                     String Id = randomAlphaNumeric(10);
                     Map<String, dynamic> infoMembreMap = {
-                      "Id": Id,
                       "Nom": nomController.text,
                       "Prenom": prenomController,
                       "DateNaissance": dateNaissController,
@@ -263,7 +264,7 @@ class _AddMemberFormState extends State<AddMemberForm> {
     );
   }
 
-/*** controle du datePicker ****/
+/// * controle du datePicker ***
   Future<void> selectionDate() async {
     DateTime? picked = await showDatePicker(
         context: context,
